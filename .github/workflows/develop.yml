@@ -37,9 +37,9 @@ jobs:
 
         - name: health check
           run: |
-            docker run -d --name saleor-api saleor:develop
+            docker run -d --name api saleor:develop
             curl -f http://localhost:8000/graphql/ || exit 1
-            docker stop saleor-api
+            docker stop api
         
         - name: install trivy
           run: pip install trivy  
