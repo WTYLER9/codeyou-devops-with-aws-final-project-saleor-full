@@ -31,7 +31,9 @@ jobs:
           run: pip-audit > pip_audit_report.log || true
 
         - name: build api docker
-          run: docker build -t saleor:develop -f saleor-api/ .
+          run: |
+            cd saleor-api
+            docker build -t saleor:develop .
 
         - name: health check
           run: |
