@@ -37,8 +37,9 @@ services:
     depends_on:
       - api
     restart: unless-stopped
-    environment:
-      - API_URL=http://saleor-api:8000/graphql/
+    env_file:
+      - common.env
+      - backend.env
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000"]
       interval: 30s
