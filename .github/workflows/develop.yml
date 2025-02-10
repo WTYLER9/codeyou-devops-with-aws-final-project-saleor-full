@@ -37,10 +37,9 @@ jobs:
 
         - name: health check
           run: |
-            docker run -d --name saleor-api ${{ secrets.DOCKER_USERNAME }}/saleor:develop
-            docker run -d --name saleor-dashboard ${{ secrets.DOCKER_USERNAME }}/saleor:develop
-            curl -f http://localhost:8000/graphql || exit 1
-            docker stop saleor-api saleor-dashboard
+            docker run -d --name saleor-api saleor:develop
+            curl -f http://localhost:8000/graphql/ || exit 1
+            docker stop saleor-api
         
         - name: install trivy
           run: pip install trivy  
