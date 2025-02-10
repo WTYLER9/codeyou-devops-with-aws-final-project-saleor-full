@@ -53,7 +53,7 @@ services:
       - saleor-db:/var/lib/postgresql/data
       - ./replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql
     environment:
-      - POSTGRES_USER=saleor
+      - POSTGRES_USER=saleor_read_only
       - POSTGRES_PASSWORD=saleor
     restart: unless-stopped
     healthcheck:
