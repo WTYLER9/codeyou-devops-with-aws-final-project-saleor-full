@@ -3,6 +3,7 @@ name: develop branch stuff
 on:
   push:
     branches:
+      - main
       - develop
 
 jobs:
