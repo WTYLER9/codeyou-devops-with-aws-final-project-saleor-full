@@ -32,7 +32,8 @@ services:
       context: ./saleor-dashboard
       dockerfile: Dockerfile
     ports:
-      - 9000:80
+      - 9000:9000
+      - 80:80
     depends_on:
       - api
     restart: unless-stopped
@@ -105,6 +106,7 @@ services:
     ports:
       - 8025:8025
       - 1025:1025
+      - 1110:1110
     restart: unless-stopped
     networks:
       - saleor-backend-tier
