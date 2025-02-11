@@ -41,11 +41,8 @@ jobs:
             curl -f http://localhost:8000/graphql/ || echo "something failed"
             docker stop api
         
-        - name: install trivy
-          run: pip install trivy  
-        
         - name: trivy scan
-          run: trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:develop > trivy_scan_report.log || true
+          run: trivy image saleor:develop > trivy_scan_report.log || true
 
         - name: Log in to Docker Hub
           uses: docker/login-action@v2
