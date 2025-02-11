@@ -47,8 +47,14 @@ jobs:
             curl -f http://localhost:8000/graphql/ || echo "something failed"
             docker stop api
         
+        - name: Install Trivy
+          run: |
+            sudo apt-get update && sudo apt-get install -y wget
+            wget https://github.com/aquasecurity/trivy/releases/download/v0.35.0/trivy_0.35.0_Linux-64bit.deb
+            sudo dpkg -i trivy_0.35.0_Linux-64bit.deb
+      
         - name: trivy scan
-          run: trivy image saleor:develop > trivy_scan_report.log || true
+          run: trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:develop > trivy_scan_report.log || true
 
         - name: Push Docker image to Docker Hub
           run: |
