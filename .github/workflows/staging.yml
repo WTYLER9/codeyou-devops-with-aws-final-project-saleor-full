@@ -3,7 +3,7 @@ name: staging branch stuff
 on:
   push:
     branches:
-      
+      - master
       - staging
 
 jobs:
