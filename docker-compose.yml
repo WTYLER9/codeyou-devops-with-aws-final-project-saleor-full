@@ -19,7 +19,7 @@ services:
       - ALLOWED_HOSTS=localhost,api,dashboard
       - JAEGER_AGENT_HOST=jaeger
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]  
       interval: 30s
       timeout: 10s
       retries: 3
