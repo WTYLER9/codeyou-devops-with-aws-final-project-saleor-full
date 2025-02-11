@@ -45,10 +45,10 @@ jobs:
 
       - name: Push Docker image and latest tag to Docker Hub
         run: |
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/saleor:production \
-            ${{ secrets.DOCKERHUB_USERNAME }}/saleor:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/saleor:production
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/saleor:latest  
+          docker tag ${{ secrets.DOCKER_USERNAME }}/saleor:production \
+            ${{ secrets.DOCKER_USERNAME }}/saleor:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/saleor:production
+          docker push ${{ secrets.DOCKER_USERNAME }}/saleor:latest  
         
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
