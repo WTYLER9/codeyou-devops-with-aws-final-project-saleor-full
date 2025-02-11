@@ -15,7 +15,7 @@ jobs:
       
       - name: Ensure Staging Branch is successful
         run: |
-          curl -s "https://api.github.com/repos/your-org/your-repo/commits/staging/status" | jq '.statuses[0].state' | grep -q 'success'
+          curl -s "https://api.github.com/repos/codeyou-devops-with-aws-final-project-saleor-full/commits/staging/status" | jq '.statuses[0].state' | grep -q 'success'
       
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
