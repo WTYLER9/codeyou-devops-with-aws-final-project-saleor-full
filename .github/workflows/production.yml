@@ -18,7 +18,7 @@ jobs:
           STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/repos/WTYLER9/codeyou-devops-with-aws-final-project-saleor-full/commits/staging/status" | jq -r '.statuses[0].state')
           
-          if [[ "$STATUS" != "0" ]]; then
+          if [[ "$STATUS" != "success" ]]; then
             echo "Staging pipeline is not successful. Aborting deployment."
             exit 1
           fi
@@ -43,10 +43,13 @@ jobs:
       - name: trivy scan
         run: trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:production > trivy_scan_report.log || true
 
-      - name: Push Docker image to Docker Hub
+      - name: Push Docker image and latest tag to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/saleor:production
-
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/saleor:production \
+            ${{ secrets.DOCKERHUB_USERNAME }}/saleor:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/saleor:production
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/saleor:latest  
+        
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
