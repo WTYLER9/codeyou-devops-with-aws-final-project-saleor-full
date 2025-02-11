@@ -15,7 +15,6 @@ jobs:
       
       - name: Ensure Staging Branch is successful
         run: |
-          run: |
           STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/repos/WTYLER9/codeyou-devops-with-aws-final-project-saleor-full /commits/staging/status" | jq -r '.statuses[0].state')
           
