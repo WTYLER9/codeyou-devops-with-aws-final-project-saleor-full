@@ -27,7 +27,7 @@ jobs:
             docker compose down
 
         - name: build api docker
-          run: 
+          run: |
             cd saleor-api
             docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:staging .
 
