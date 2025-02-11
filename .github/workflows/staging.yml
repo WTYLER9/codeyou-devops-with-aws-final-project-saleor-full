@@ -24,7 +24,9 @@ jobs:
             password: ${{ secrets.DOCKER_PASSWORD }}
 
         - name: build api docker
-          run: docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:staging .
+          run: 
+            cd saleor-api
+            docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:staging .
 
         - name: Install Trivy
           run: |
