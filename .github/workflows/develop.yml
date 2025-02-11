@@ -43,7 +43,7 @@ jobs:
 
         - name: health check
           run: |
-            docker run -d --name api saleor:develop
+            docker run -d --name api ${{ secrets.DOCKER_USERNAME }}/saleor:develop
             curl -f http://localhost:8000/graphql/ || echo "something failed"
             docker stop api
         
