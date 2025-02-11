@@ -3,6 +3,7 @@ name: staging branch stuff
 on:
   push:
     branches:
+      - master
       - staging
 
 jobs:
@@ -42,3 +43,6 @@ jobs:
         - name: Push Docker image to Docker Hub
           run: |
             docker push ${{ secrets.DOCKER_USERNAME }}/saleor:staging
+        
+        - name: exitstatus
+          run: exit 0

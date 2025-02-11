@@ -18,7 +18,7 @@ jobs:
           STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/repos/WTYLER9/codeyou-devops-with-aws-final-project-saleor-full/commits/staging/status" | jq -r '.statuses[0].state')
           
-          if [[ "$STATUS" != "success" ]]; then
+          if [[ "$STATUS" != "0" ]]; then
             echo "Staging pipeline is not successful. Aborting deployment."
             exit 1
           fi
