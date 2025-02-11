@@ -15,12 +15,15 @@ jobs:
       
       - name: Ensure Staging Branch is successful
         run: |
-          curl -s "https://api.github.com/repos/WTYLER9/codeyou-devops-with-aws-final-project-saleor-full/commits/staging/status" | jq '.statuses[0].state' | grep -q 'success'
+          run: |
+          STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/WTYLER9/codeyou-devops-with-aws-final-project-saleor-full /commits/staging/status" | jq -r '.statuses[0].state')
+          
           if [[ "$STATUS" != "success" ]]; then
             echo "Staging pipeline is not successful. Aborting deployment."
             exit 1
           fi
-          
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
