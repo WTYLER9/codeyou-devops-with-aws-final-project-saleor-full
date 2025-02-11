@@ -44,5 +44,17 @@ jobs:
           run: |
             docker push ${{ secrets.DOCKER_USERNAME }}/saleor:staging
         
-        - name: exitstatus
-          run: exit 0
+        - name: Set Commit Status
+          uses: actions/github-script@v6
+          with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              github.repos.createCommitStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: context.sha,
+                state: 'success',
+                context: 'CI/CD Pipeline',
+                description: 'Staging checks passed',
+                target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+              })
