@@ -3,7 +3,6 @@ name: production branch stuff
 on:
   push:
     branches:
-      - master
       - production
 
 jobs:
@@ -22,7 +21,7 @@ jobs:
             echo "Staging pipeline is not successful. Aborting deployment."
             exit 1
           fi
-
+          
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -48,14 +47,14 @@ jobs:
           docker tag ${{ secrets.DOCKER_USERNAME }}/saleor:production \
             ${{ secrets.DOCKER_USERNAME }}/saleor:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/saleor:production
-          docker push ${{ secrets.DOCKER_USERNAME }}/saleor:latest  
-        
+          docker push ${{ secrets.DOCKER_USERNAME }}/saleor:latest
+
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       
       - name: Push to AWS
-        run: aws ecs update-service --cluster <cluster-name> --service <service-name> --force-new-deployment          
+        run: aws ecs update-service --cluster <cluster-name> --service <service-name> --force-new-deployment     

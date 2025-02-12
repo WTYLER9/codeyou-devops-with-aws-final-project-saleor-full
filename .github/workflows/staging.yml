@@ -3,7 +3,6 @@ name: staging branch stuff
 on:
   push:
     branches:
-      - master
       - staging
 
 jobs:
@@ -43,13 +42,13 @@ jobs:
         - name: Push Docker image to Docker Hub
           run: |
             docker push ${{ secrets.DOCKER_USERNAME }}/saleor:staging
-        
+
         - name: Set Commit Status
           uses: actions/github-script@v6
           with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-              github.repos.createCommitStatus({
+              github.rest.repos.createCommitStatus({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 sha: context.sha,
