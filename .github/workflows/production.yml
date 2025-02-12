@@ -57,4 +57,4 @@ jobs:
           aws-region: us-east-1
       
       - name: Push to AWS
-        run: aws ecs update-service --cluster <cluster-name> --service <service-name> --force-new-deployment     
+        run: aws ecs update-service --cluster Saleor-Project --service saleor-update --force-new-deployment --region us-east-2     
