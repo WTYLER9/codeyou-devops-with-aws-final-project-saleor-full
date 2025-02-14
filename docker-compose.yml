@@ -13,7 +13,7 @@ services:
         condition: service_healthy
       jaeger: 
         condition: service_healthy
-      mp: 
+      mailpit: 
         condition: service_healthy
     volumes:
       - media:/app/media
