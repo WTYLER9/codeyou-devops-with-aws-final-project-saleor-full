@@ -35,16 +35,22 @@ jobs:
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
 
-        - name: build api docker
+        - name: build docker files
           run: |
             cd saleor-api
             docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:develop .
+            cd ..
+            cd saleor-dashboard
+            docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:developdash .
 
         - name: health check
           run: |
             docker run -d --name api ${{ secrets.DOCKER_USERNAME }}/saleor:develop
-            curl -f http://localhost:8000/graphql/ || echo "something failed"
+            docker run -d --name dashboard ${{ secrets.DOCKER_USERNAME }}/saleor:developdash
+            curl -f http://localhost:8000/graphql/ || echo "something failed with api"
+            curl -f http://localhost:9000/health/ || echo "something failed with dashboard"
             docker stop api
+            docker stop dashboard
         
         - name: Install Trivy
           run: |
@@ -53,8 +59,11 @@ jobs:
             sudo dpkg -i trivy_0.35.0_Linux-64bit.deb
       
         - name: trivy scan
-          run: trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:develop > trivy_scan_report.log || true
+          run: |
+            trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:develop > trivy_scan_report.log || true
+            trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:developdash > trivy_scandash_report.log || true
 
         - name: Push Docker image to Docker Hub
           run: |
             docker push ${{ secrets.DOCKER_USERNAME }}/saleor:develop
+            docker push ${{ secrets.DOCKER_USERNAME }}/saleor:developdash

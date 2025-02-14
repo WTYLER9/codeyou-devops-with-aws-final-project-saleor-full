@@ -32,6 +32,9 @@ jobs:
         run: |
           cd saleor-api
           docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:production .
+          cd ..
+          cd saleor-dashboard
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:productiondash .
 
       - name: Install Trivy
         run: |
@@ -40,7 +43,9 @@ jobs:
           sudo dpkg -i trivy_0.35.0_Linux-64bit.deb
       
       - name: trivy scan
-        run: trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:production > trivy_scan_report.log || true
+        run: |
+          trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:production > trivy_scan_report.log || true
+          trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:productiondash > trivy_scandash_report.log || true
 
       - name: Push Docker image and latest tag to Docker Hub
         run: |
@@ -48,13 +53,17 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/saleor:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/saleor:production
           docker push ${{ secrets.DOCKER_USERNAME }}/saleor:latest
+          docker tag ${{ secrets.DOCKER_USERNAME }}/saleor:productiondash \
+            ${{ secrets.DOCKER_USERNAME }}/saleor:latestdash
+          docker push ${{ secrets.DOCKER_USERNAME }}/saleor:productiondash
+          docker push ${{ secrets.DOCKER_USERNAME }}/saleor:latestdash
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: us-east-2
       
       - name: Push to AWS
-        run: aws ecs update-service --cluster Saleor-Project --service saleor-update --force-new-deployment --region us-east-2     
+        run: aws ecs update-service --cluster Saleor-Project --service saleor-update --force-new-deployment      

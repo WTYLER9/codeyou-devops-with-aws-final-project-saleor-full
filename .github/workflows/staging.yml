@@ -22,13 +22,17 @@ jobs:
           run: |
             docker compose -f docker-compose.yml up -d
             docker compose ps
-            docker compose exec api curl -f http://localhost:8000/graphql || echo "something failed"
+            docker compose exec api curl -f http://localhost:8000/graphql || echo "something failed with api"
+            docker compose exec dashboard curl -f http://localhost:9000/health || echo "something failed with dashboard"
             docker compose down
 
         - name: build api docker
           run: |
             cd saleor-api
             docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:staging .
+            cd ..
+            cd saleor-dashboard
+            docker build -t ${{ secrets.DOCKER_USERNAME }}/saleor:stagingdash .
 
         - name: Install Trivy
           run: |
@@ -37,11 +41,14 @@ jobs:
             sudo dpkg -i trivy_0.35.0_Linux-64bit.deb
 
         - name: trivy scan
-          run: trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:staging > trivy_scan_report.log || true
+          run: |
+            trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:staging > trivy_scan_report.log || true
+            trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:stagingdash > trivy_scandash_report.log || true
 
         - name: Push Docker image to Docker Hub
           run: |
             docker push ${{ secrets.DOCKER_USERNAME }}/saleor:staging
+            docker push ${{ secrets.DOCKER_USERNAME }}/saleor:stagingdash
 
         - name: Set Commit Status
           uses: actions/github-script@v6
