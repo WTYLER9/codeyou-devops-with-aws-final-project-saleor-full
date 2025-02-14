@@ -63,7 +63,7 @@ jobs:
             trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:develop > trivy_scan_report.log || true
             trivy image ${{ secrets.DOCKER_USERNAME }}/saleor:developdash > trivy_scandash_report.log || true
 
-        - name: Push Docker image to Docker Hub
+        - name: Push Docker images to Docker Hub
           run: |
             docker push ${{ secrets.DOCKER_USERNAME }}/saleor:develop
             docker push ${{ secrets.DOCKER_USERNAME }}/saleor:developdash
