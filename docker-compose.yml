@@ -7,9 +7,14 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - db
-      - redis 
-      - jaeger
+      db: 
+        condition: service_healthy
+      redis: 
+        condition: service_healthy
+      jaeger: 
+        condition: service_healthy
+      mp: 
+        condition: service_healthy
     volumes:
       - media:/app/media
     env_file:
@@ -34,13 +39,14 @@ services:
     ports:
       - 9000:80
     depends_on:
-      - api
+      api:
+        condition: service_started
     restart: unless-stopped
     env_file:
       - common.env
       - backend.env
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
       timeout: 10s
       retries: 3
